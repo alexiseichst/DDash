@@ -20,10 +20,6 @@ public slots:
     void exec();
     void show();
 
-private slots:
-    void saveConfig();
-    void loadConfig();
-
 private:
     MainWindow* m_mainWindow;
     QList<Action*> m_actions;

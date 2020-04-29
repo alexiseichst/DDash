@@ -3,19 +3,13 @@
 #include "actionfilesize.h"
 #include "actionfileexists.h"
 #include "mainwindow.h"
+#include "configuration.h"
 
 #include <QSvgRenderer>
 #include <QVBoxLayout>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QTextStream>
-#include <QDir>
-#include <QVariantMap>
-#include <QMap>
-#include <QApplication>
-#include <QFileInfo>
 
-DDash::DDash(QObject *parent) : QObject(parent)
+DDash::DDash(QObject *parent) :
+    QObject(parent)
 {
     m_strToAction.insert("ActionFileSize",[](QObject* parent){return new ActionFileSize(parent);});
     m_strToSetAction.insert("ActionFileSize",[](const QVariantMap & params,Action* action)
@@ -31,90 +25,21 @@ DDash::DDash(QObject *parent) : QObject(parent)
         action_file_size->setFile(QFile(params["file"].toString()));
     });
 
-    loadConfig();
+    QList<QVariantMap> list = Configuration::loadAllAction();
+    for (const QVariantMap map: list)
+    {
+        addAction(createAction(map));
+    }
 }
 
 DDash::~DDash()
 {
-    saveConfig();
-}
-
-void DDash::saveConfig()
-{
-    QDir act_dir("act");
-    if (act_dir.exists())
+    QList<QVariantMap> list;
+    for(Action* a : m_actions)
     {
-        QStringList json_list = act_dir.entryList(QStringList() << "*.json",QDir::Files);
-        for(const QString json : json_list)
-        {
-            QFile file(json);
-            if (file.open(QIODevice::ReadOnly | QIODevice::Text))
-            {
-                const QJsonObject obj = QJsonDocument::fromJson(file.readAll()).object();
-                const QVariantMap map = obj.toVariantMap();
-                file.close();
-
-                if (map.contains("application") &&
-                    map["application"].toString() == QApplication::applicationName())
-                {
-                    file.remove();
-                }
-            }
-        }
+        list.append(a->getConfigMap());
     }
-    else
-    {
-        QDir::current().mkdir("act");
-        for(Action* a : m_actions)
-        {
-            QJsonDocument doc(QJsonObject::fromVariantMap(a->getConfigMap()));
-            QFileInfo file_info(act_dir,QString("%1.json").arg(doc.object()["name"].toString()));
-            QFile file(file_info.absoluteFilePath());
-            if (file.open(QIODevice::WriteOnly | QIODevice::Text))
-            {
-                QTextStream out(&file);
-                out << doc.toJson();
-            }
-        }
-    }
-}
-
-void DDash::loadConfig()
-{
-    const QDir act_dir("act");
-    const QStringList json_list = act_dir.entryList(QStringList() << "*.json",QDir::Files);
-    for(const QString json : json_list)
-    {
-        const QFileInfo file_info(act_dir,json);
-        QFile file(file_info.absoluteFilePath());
-        if (file.open(QIODevice::ReadOnly | QIODevice::Text))
-        {
-            const QJsonObject obj = QJsonDocument::fromJson(file.readAll()).object();
-            const QVariantMap map = obj.toVariantMap();
-            file.close();
-            
-            if (map.contains("application") &&
-                map["application"].toString().trimmed() == QApplication::applicationName())
-            {
-                addAction(createAction(map));
-            }
-        }
-    }
-}
-
-void DDash::testInit()
-{
-    QVariantMap params;
-    params.insert("type","ActionFileSize");
-    params.insert("name","CMakeLists");
-    params.insert("file","C:/workdir/dev/WinControler/CMakeLists.txt.user");
-    addAction(createAction(params));
-
-    params.clear();
-    params.insert("type","ActionFileExists");
-    params.insert("name","Image");
-    params.insert("file","C:/Users/Alexis/Videos/Radeon ReLive/2020.03.25-17.04.png");
-    addAction(createAction(params));
+    Configuration::saveActionList(list);
 }
 
 Action* DDash::createAction(const QVariantMap & params,QObject* parent) const

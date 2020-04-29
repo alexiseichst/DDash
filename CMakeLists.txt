@@ -40,6 +40,8 @@ add_executable(DDash
   label.cpp
   button.h
   button.cpp
+  configuration.h
+  configuration.cpp
 )
 
 target_link_libraries(DDash Qt5::Core Qt5::Widgets Qt5::Svg)
