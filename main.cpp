@@ -13,6 +13,7 @@ Runtime* createRunTime(QObject *parent = nullptr)
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    a.setApplicationName("DDash");
     createRunTime();
     return a.exec();
 }

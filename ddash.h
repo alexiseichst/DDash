@@ -14,6 +14,7 @@ class DDash : public QObject
     Q_OBJECT
 public:
     explicit DDash(QObject *parent = nullptr);
+    ~DDash();
 
 public slots:
     void exec();
@@ -27,7 +28,7 @@ private:
     MainWindow* m_mainWindow;
     QList<Action*> m_actions;
     QMap<QString,std::function<Action*(QObject* parent)>> m_strToAction;
-    QMap<QString,std::function<void(const QMap<QString,QString> & params,Action* action)>> m_strToSetAction;
+    QMap<QString,std::function<void(const QVariantMap & params,Action* action)>> m_strToSetAction;
 
     Action* createAction(const QVariantMap & params,QObject* parent = nullptr) const;
     void addAction(Action* action);
