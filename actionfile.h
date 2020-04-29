@@ -1,0 +1,29 @@
+#pragma once
+
+#include "action.h"
+
+#include <QFile>
+#include <QObject>
+#include <QMap>
+#include <QVariant>
+
+
+class ActionFile : public Action
+{
+    Q_OBJECT
+public:
+    explicit ActionFile(const QString & type,QObject *parent = nullptr);
+    void setFile(const QFile & file);
+    const QFile & getFile() const;
+    virtual QMap<QString,QVariant> getConfigMap() const;
+
+public slots:
+    virtual void exec() const = 0;
+    virtual QWidget* getWidget() = 0;
+
+private:
+    QFile m_file;
+
+signals:
+
+};
