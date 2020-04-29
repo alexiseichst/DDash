@@ -15,7 +15,7 @@ public:
     explicit ActionFile(const QString & type,QObject *parent = nullptr);
     void setFile(const QFile & file);
     const QFile & getFile() const;
-    virtual QMap<QString,QVariant> getConfigMap() const;
+    virtual QVariantMap getConfigMap() const;
 
 public slots:
     virtual void exec() const = 0;

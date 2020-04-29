@@ -36,7 +36,7 @@ void DDash::saveConfig()
     for(Action* a : m_actions)
     {
         QJsonDocument doc(QJsonObject::fromVariantMap(a->getConfigMap()));
-        QFile file(QString("%1.json").arg(doc.object()["name"].toString()));
+        QFile file(QString("act/%1.json").arg(doc.object()["name"].toString()));
         if (file.open(QIODevice::WriteOnly | QIODevice::Text))
         {
             QTextStream out(&file);
@@ -47,30 +47,28 @@ void DDash::saveConfig()
 
 void DDash::loadConfig()
 {
-    QStringList json_list = QDir::current().entryList(QStringList() << "*.json",QDir::Files);
+    QStringList json_list = QDir::current().entryList(QStringList() << "act/*.json",QDir::Files);
     for(const QString json : json_list)
     {
         QFile file(json);
         if (file.open(QIODevice::ReadOnly | QIODevice::Text))
         {
-            QJsonDocument doc(QJsonArray() ile.readAll());
-        }
-    }
-    for(Action* a : m_actions)
-    {
-        QJsonDocument doc(QJsonObject::fromVariantMap(a->getConfigMap()));
-        QFile file(QString("%1.json").arg(doc.object()["name"].toString()));
-        if (file.open(QIODevice::WriteOnly | QIODevice::Text))
-        {
-            QTextStream out(&file);
-            out << doc.toJson();
+            const QVariantMap map = QJsonObject::fromJson(file.readAll()).toVariantMap()
+            file.close();
+            
+            if (map.isValid() &&
+                map.contains("application") && 
+                map["application"])
+            {
+                addAction(createAction(map));
+            }
         }
     }
 }
 
 void DDash::testInit()
 {
-    QMap<QString,QString> params;
+    QVariantMap params;
     params.insert("type","ActionFileSize");
     params.insert("name","CMakeLists");
     params.insert("file","C:/workdir/dev/WinControler/CMakeLists.txt.user");
@@ -83,7 +81,7 @@ void DDash::testInit()
     addAction(createAction(params));
 }
 
-Action* DDash::createAction(const QMap<QString,QString> & params,QObject* parent) const
+Action* DDash::createAction(const QVariantMap & params,QObject* parent) const
 {
     Action* action = strToAction(params["type"],parent);
 

@@ -31,8 +31,8 @@ QWidget* ActionFileSize::getWidget()
     return m_widget;
 }
 
-QMap<QString,QVariant> ActionFileSize::getConfigMap() const
+QVariantMap ActionFileSize::getConfigMap() const
 {
-    QMap<QString,QVariant> rt = ActionFile::getConfigMap();
+    QVariantMap rt = ActionFile::getConfigMap();
     return rt;
 }

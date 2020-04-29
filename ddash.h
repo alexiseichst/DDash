@@ -29,7 +29,7 @@ private:
     QMap<QString,std::function<Action*(QObject* parent)>> m_strToAction;
     QMap<QString,std::function<void(const QMap<QString,QString> & params,Action* action)>> m_strToSetAction;
 
-    Action* createAction(const QMap<QString,QString> & params,QObject* parent = nullptr) const;
+    Action* createAction(const QVariantMap & params,QObject* parent = nullptr) const;
     void addAction(Action* action);
     Action* strToAction(const QString & name,QObject* parent = nullptr) const;
     void testInit();

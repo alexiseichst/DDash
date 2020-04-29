@@ -19,7 +19,7 @@ public:
 public slots:
     virtual void exec() const;
     virtual QWidget* getWidget();
-    virtual QMap<QString,QVariant> getConfigMap() const;
+    virtual QVariantMap getConfigMap() const;
 
 private:
     LabelStatus* m_widget;

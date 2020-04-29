@@ -25,8 +25,8 @@ QWidget* ActionFileExists::getWidget()
     return m_widget;
 }
 
-QMap<QString,QVariant> ActionFileExists::getConfigMap() const
+QVariantMap ActionFileExists::getConfigMap() const
 {
-    QMap<QString,QVariant> rt = ActionFile::getConfigMap();
+    QVariantMap rt = ActionFile::getConfigMap();
     return rt;
 }

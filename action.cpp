@@ -23,9 +23,9 @@ const QString & Action::getType() const
     return m_type;
 }
 
-QMap<QString,QVariant> Action::getConfigMap() const
+QVariantMap Action::getConfigMap() const
 {
-    QMap<QString,QVariant> rt;
+    QVariantMap rt;
     rt.insert("application",QApplication::applicationName());
     rt.insert("type",m_type);
     rt.insert("name",objectName());

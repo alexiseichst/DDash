@@ -13,7 +13,7 @@ public:
     const QString getName() const;
     const QString & getType() const;
     virtual QWidget* getWidget() = 0;
-    virtual QMap<QString,QVariant> getConfigMap() const;
+    virtual QVariantMap getConfigMap() const;
 
 private:
     const QString m_type;

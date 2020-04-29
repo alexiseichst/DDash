@@ -16,9 +16,9 @@ const QFile & ActionFile::getFile() const
     return m_file;
 }
 
-QMap<QString,QVariant> ActionFile::getConfigMap() const
+QVariantMap ActionFile::getConfigMap() const
 {
-    QMap<QString,QVariant> rt = Action::getConfigMap();
+    QVariantMap rt = Action::getConfigMap();
     rt.insert("file",m_file.fileName());
     return rt;
 }
