@@ -3,8 +3,13 @@
 
 #include <QFileInfo>
 
-ActionFileExists::ActionFileExists(QObject *parent) :
-    ActionFile("ActionFileExists",parent),
+ActionFileExists::ActionFileExists(const QString & name,
+                                   const QString & uuid,
+                                   QObject *parent) :
+    ActionFile("ActionFileExists",
+               name,
+               uuid,
+               parent),
     m_widget(nullptr)
 {
 

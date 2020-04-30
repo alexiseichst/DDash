@@ -1,7 +1,13 @@
 #include "actionfile.h"
 
-ActionFile::ActionFile(const QString & type,QObject *parent) :
-    Action(type,parent)
+ActionFile::ActionFile(const QString & type,
+                       const QString & name,
+                       const QString & uuid,
+                       QObject *parent) :
+    Action(type,
+           name,
+           uuid,
+           parent)
 {
 
 }

@@ -9,8 +9,9 @@ LabelText::LabelText(QWidget *parent) : QWidget(parent)
     layout()->addWidget(&m_text);
 }
 
-void LabelText::setText(const QString & text)
+void LabelText::setText(const QString & text,const QString & color)
 {
+    m_text.setColor(color);
     m_text.setText(text);
 }
 

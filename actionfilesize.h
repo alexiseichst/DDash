@@ -6,6 +6,7 @@
 #include <QObject>
 #include <QMap>
 #include <QVariant>
+#include <QString>
 
 class LabelText;
 
@@ -13,7 +14,9 @@ class ActionFileSize : public ActionFile
 {
     Q_OBJECT
 public:
-    explicit ActionFileSize(QObject *parent = nullptr);
+    explicit ActionFileSize(const QString & name,
+                            const QString & uuid,
+                            QObject *parent);
 
 public slots:
     virtual void exec() const;

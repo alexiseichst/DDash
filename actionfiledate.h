@@ -6,17 +6,17 @@
 #include <QObject>
 #include <QMap>
 #include <QVariant>
+#include <QString>
 
+class LabelText;
 
-class LabelStatus;
-
-class ActionFileExists : public ActionFile
+class ActionFileDate : public ActionFile
 {
     Q_OBJECT
 public:
-    explicit ActionFileExists(const QString & name,
-                              const QString & uuid,
-                              QObject *parent);
+    explicit ActionFileDate(const QString & name,
+                            const QString & uuid,
+                            QObject *parent);
 
 public slots:
     virtual void exec() const;
@@ -24,7 +24,7 @@ public slots:
     virtual QVariantMap getConfigMap() const;
 
 private:
-    LabelStatus* m_widget;
+    LabelText* m_widget;
 
 
 signals:

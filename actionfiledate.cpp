@@ -1,12 +1,13 @@
-#include "actionfilesize.h"
+#include "actionfiledate.h"
 #include "labeltext.h"
 
 #include <QFileInfo>
+#include <QDateTime>
 
-ActionFileSize::ActionFileSize(const QString & name,
+ActionFileDate::ActionFileDate(const QString & name,
                                const QString & uuid,
                                QObject *parent) :
-    ActionFile("ActionFileSize",
+    ActionFile("ActionFileDate",
                name,
                uuid,
                parent),
@@ -15,7 +16,7 @@ ActionFileSize::ActionFileSize(const QString & name,
 
 }
 
-void ActionFileSize::exec() const
+void ActionFileDate::exec() const
 {
     QFileInfo file(getFile().fileName());
     QString  text = "Error";
@@ -23,13 +24,13 @@ void ActionFileSize::exec() const
     if(m_widget &&
             file.exists())
     {
-        text = QString("%1 Ko").arg(QString::number(file.size()/1000));
+        text = file.lastModified().date().toString(Qt::SystemLocaleShortDate);
         color = "green";
     }
     m_widget->setText(text,color);
 }
 
-QWidget* ActionFileSize::getWidget()
+QWidget* ActionFileDate::getWidget()
 {
     m_widget = new LabelText(nullptr);
 
@@ -38,7 +39,7 @@ QWidget* ActionFileSize::getWidget()
     return m_widget;
 }
 
-QVariantMap ActionFileSize::getConfigMap() const
+QVariantMap ActionFileDate::getConfigMap() const
 {
     QVariantMap rt = ActionFile::getConfigMap();
     return rt;

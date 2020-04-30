@@ -10,7 +10,7 @@ public:
     explicit LabelText(QWidget *parent = nullptr);
 
 public:
-    void setText(const QString & text);
+    void setText(const QString & text,const QString & color = "black");
     void setLabel(const QString & label);
 
 private:
