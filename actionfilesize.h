@@ -14,8 +14,8 @@ class ActionFileSize : public ActionFile
 {
     Q_OBJECT
 public:
-    explicit ActionFileSize(const QString & name,
-                            const QString & uuid,
+    explicit ActionFileSize(const QString &name,
+                            const QString &uuid,
                             QObject *parent);
 
 public slots:

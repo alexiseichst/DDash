@@ -10,8 +10,8 @@ class LabelStatus : public QWidget
     Q_OBJECT
 public:
     explicit LabelStatus(QWidget *parent = nullptr);
-    void setLabel(const QString & label);
-    void setStatus(const bool & status);
+    void setLabel(const QString &label);
+    void setStatus(const bool &status);
 
 private:
     Label m_label;

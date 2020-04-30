@@ -4,8 +4,8 @@
 #include <QFileInfo>
 #include <QDateTime>
 
-ActionFileDate::ActionFileDate(const QString & name,
-                               const QString & uuid,
+ActionFileDate::ActionFileDate(const QString &name,
+                               const QString &uuid,
                                QObject *parent) :
     ActionFile("ActionFileDate",
                name,

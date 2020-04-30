@@ -1,8 +1,8 @@
 #include "actionfile.h"
 
-ActionFile::ActionFile(const QString & type,
-                       const QString & name,
-                       const QString & uuid,
+ActionFile::ActionFile(const QString &type,
+                       const QString &name,
+                       const QString &uuid,
                        QObject *parent) :
     Action(type,
            name,
@@ -12,12 +12,12 @@ ActionFile::ActionFile(const QString & type,
 
 }
 
-void ActionFile::setFile(const QFile & file)
+void ActionFile::setFile(const QFile &file)
 {
     m_file.setFileName(file.fileName());
 }
 
-const QFile & ActionFile::getFile() const
+const QFile &ActionFile::getFile() const
 {
     return m_file;
 }

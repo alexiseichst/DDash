@@ -9,13 +9,13 @@ class Action : public QObject
 {
     Q_OBJECT
 public:
-    explicit Action(const QString & type,
-                    const QString & name,
-                    const QString & uuid,
+    explicit Action(const QString &type,
+                    const QString &name,
+                    const QString &uuid,
                     QObject *parent);
     const QString getName() const;
-    const QString & getType() const;
-    const QString & getUuid() const;
+    const QString &getType() const;
+    const QString &getUuid() const;
     virtual QWidget* getWidget() = 0;
     virtual QVariantMap getConfigMap() const;
 

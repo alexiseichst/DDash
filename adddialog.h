@@ -12,17 +12,20 @@ class AddDialog : public QDialog
 {
     Q_OBJECT
 public:
-    explicit AddDialog(QWidget *parent,QMap<QString,std::function<Action*(const QString & name,
-                                                                          const QString & uuid,
+    explicit AddDialog(QWidget *parent,QMap<QString,std::function<Action*(const QString &name,
+                                                                          const QString &uuid,
                                                                           QObject* parent)>> str_to_action);
-
+    QVariantMap getActionMap() const;
 private:
-    const QMap<QString,std::function<Action*(const QString & name,
-                                             const QString & uuid,
+    const QMap<QString,std::function<Action*(const QString &name,
+                                             const QString &uuid,
                                              QObject* parent)>> m_strToAction;
     QComboBox m_typeCombo;
+    QWidget* m_editWidget;
 
-signals:
+private slots:
+    void currentIndexChanged(const QString &text);
+
 
 };
 

@@ -7,7 +7,7 @@ Label::Label(QWidget *parent) :
     setStyleSheet(m_style);
 }
 
-void Label::setColor(const QString & color)
+void Label::setColor(const QString &color)
 {
     setStyleSheet(QString("%1 ; color:%2;").arg(m_style,color));
 }

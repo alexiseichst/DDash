@@ -14,8 +14,8 @@ class ActionFileExists : public ActionFile
 {
     Q_OBJECT
 public:
-    explicit ActionFileExists(const QString & name,
-                              const QString & uuid,
+    explicit ActionFileExists(const QString &name,
+                              const QString &uuid,
                               QObject *parent);
 
 public slots:

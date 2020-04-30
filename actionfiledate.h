@@ -14,8 +14,8 @@ class ActionFileDate : public ActionFile
 {
     Q_OBJECT
 public:
-    explicit ActionFileDate(const QString & name,
-                            const QString & uuid,
+    explicit ActionFileDate(const QString &name,
+                            const QString &uuid,
                             QObject *parent);
 
 public slots:

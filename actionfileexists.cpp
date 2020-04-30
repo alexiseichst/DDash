@@ -3,8 +3,8 @@
 
 #include <QFileInfo>
 
-ActionFileExists::ActionFileExists(const QString & name,
-                                   const QString & uuid,
+ActionFileExists::ActionFileExists(const QString &name,
+                                   const QString &uuid,
                                    QObject *parent) :
     ActionFile("ActionFileExists",
                name,

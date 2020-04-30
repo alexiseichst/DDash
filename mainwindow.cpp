@@ -42,8 +42,8 @@ void MainWindow::addActionWidget(QWidget *action)
     m_widgetList->setItemWidget(item,action);
 }
 
-void MainWindow::addSettingsButton(const QString & name,
-                       const QString & icon)
+void MainWindow::addSettingsButton(const QString &name,
+                       const QString &icon)
 {
     Button* button = new Button(this);
     SvgRender svgicon(icon);

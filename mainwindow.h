@@ -15,8 +15,8 @@ signals:
     void addClicked();
 
 private:
-    void addSettingsButton(const QString & name,
-                           const QString & icon);
+    void addSettingsButton(const QString &name,
+                           const QString &icon);
     QWidget* m_settingsBar;
     QListWidget* m_widgetList;
     QMap<QString,std::function<void(void)>> m_buttonAction;

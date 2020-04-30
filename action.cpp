@@ -3,9 +3,9 @@
 #include <QApplication>
 #include <QUuid>
 
-Action::Action(const QString & type,
-               const QString & name,
-               const QString & uuid,
+Action::Action(const QString &type,
+               const QString &name,
+               const QString &uuid,
                QObject *parent) :
     QObject(parent),
     m_type(type),
@@ -19,12 +19,12 @@ const QString Action::getName() const
     return objectName();
 }
 
-const QString & Action::getType() const
+const QString &Action::getType() const
 {
     return m_type;
 }
 
-const QString & Action::getUuid() const
+const QString &Action::getUuid() const
 {
     return m_uuid;
 }
@@ -33,7 +33,7 @@ QVariantMap Action::getConfigMap() const
 {
     QVariantMap rt;
     rt.insert("application",QApplication::applicationName());
-    rt.insert("type",getName());
+    rt.insert("type",getType());
     rt.insert("name",objectName());
     rt.insert("uuid",getUuid());
     return rt;

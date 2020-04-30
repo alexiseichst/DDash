@@ -19,12 +19,12 @@ LabelStatus::LabelStatus(QWidget *parent) :
     m_iconFalse = svgFalse.svgToPixamp(40,40,this);
 }
 
-void LabelStatus::setLabel(const QString & label)
+void LabelStatus::setLabel(const QString &label)
 {
     m_label.setText(label);
 }
 
-void LabelStatus::setStatus(const bool & status)
+void LabelStatus::setStatus(const bool &status)
 {
     m_status.setPixmap(status ? m_iconTrue : m_iconFalse);
 }

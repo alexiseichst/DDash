@@ -8,7 +8,7 @@
 #include <QPainter>
 #include <QByteArray>
 
-SvgRender::SvgRender(const QString & name):
+SvgRender::SvgRender(const QString &name):
     m_name(name)
 {
     m_svg.insert("SPEEDOMETER",SPEEDOMETER);
@@ -17,15 +17,15 @@ SvgRender::SvgRender(const QString & name):
     m_svg.insert("ADD",ADD);
 }
 
-QIcon SvgRender::svgToIcon(const int & w,
-                const int & h,
+QIcon SvgRender::svgToIcon(const int &w,
+                const int &h,
                 QObject *parent) const
 {
     return QIcon(svgToPixamp(w,h,parent));
 }
 
-QPixmap SvgRender::svgToPixamp(const int & w,
-                    const int & h,
+QPixmap SvgRender::svgToPixamp(const int &w,
+                    const int &h,
                     QObject *parent) const
 {
     QSvgRenderer svg(QByteArray(m_svg[m_name]),parent);

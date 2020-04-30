@@ -14,33 +14,33 @@ DDash::DDash(QObject *parent) :
     QObject(parent)
 {
     // ActionFileSize
-    m_strToAction.insert("ActionFileSize",[](const QString & name,const QString & uuid,QObject* parent)
+    m_strToAction.insert("ActionFileSize",[](const QString &name,const QString &uuid,QObject* parent)
     {
         return new ActionFileSize(name,uuid,parent);
     });
-    m_strToSetAction.insert("ActionFileSize",[](const QVariantMap & params,Action* action)
+    m_strToSetAction.insert("ActionFileSize",[](const QVariantMap &params,Action* action)
     {
         ActionFileSize* action_file_size = dynamic_cast<ActionFileSize*>(action);
         action_file_size->setFile(QFile(params["file"].toString()));
     });
 
     // ActionFileExists
-    m_strToAction.insert("ActionFileExists",[](const QString & name,const QString & uuid,QObject* parent)
+    m_strToAction.insert("ActionFileExists",[](const QString &name,const QString &uuid,QObject* parent)
     {
         return new ActionFileExists(name,uuid,parent);
     });
-    m_strToSetAction.insert("ActionFileExists",[](const QVariantMap & params,Action* action)
+    m_strToSetAction.insert("ActionFileExists",[](const QVariantMap &params,Action* action)
     {
         ActionFileExists* action_file_size = dynamic_cast<ActionFileExists*>(action);
         action_file_size->setFile(QFile(params["file"].toString()));
     });
 
     // ActionFileDate
-    m_strToAction.insert("ActionFileDate",[](const QString & name,const QString & uuid,QObject* parent)
+    m_strToAction.insert("ActionFileDate",[](const QString &name,const QString &uuid,QObject* parent)
     {
         return new ActionFileDate(name,uuid,parent);
     });
-    m_strToSetAction.insert("ActionFileDate",[](const QVariantMap & params,Action* action)
+    m_strToSetAction.insert("ActionFileDate",[](const QVariantMap &params,Action* action)
     {
         ActionFileDate* action_file_size = dynamic_cast<ActionFileDate*>(action);
         action_file_size->setFile(QFile(params["file"].toString()));
@@ -73,7 +73,7 @@ void DDash::saveConfig()
     Configuration::saveActionList(list);
 }
 
-Action* DDash::createAction(const QVariantMap & params,QObject* parent) const
+Action* DDash::createAction(const QVariantMap &params,QObject* parent) const
 {
     const QString uuid = params.contains("uuid") ? params["uuid"].toString() : QString();
     Action* action = strToAction(params["type"].toString(),
@@ -84,7 +84,7 @@ Action* DDash::createAction(const QVariantMap & params,QObject* parent) const
     return action;
 }
 
-Action* DDash::strToAction(const QString & type,const QString & name,const QString & uuid,QObject* parent) const
+Action* DDash::strToAction(const QString &type,const QString &name,const QString &uuid,QObject* parent) const
 {
     Action* action = nullptr;
     if(m_strToAction.contains(type))
@@ -103,7 +103,14 @@ void DDash::addClicked()
 {
     AddDialog* dialog = new AddDialog(m_mainWindow,m_strToAction);
 
-    dialog->exec();
+    int res = dialog->exec();
+
+    if (res == QDialog::Accepted)
+    {
+        Action* a = createAction(dialog->getActionMap());
+        addAction(a);
+        m_mainWindow->addActionWidget(a->getWidget());
+    }
 
     delete dialog;
     dialog = nullptr;

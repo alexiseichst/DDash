@@ -14,11 +14,11 @@ private:
     const QString m_name;
 
 public:
-    explicit SvgRender(const QString & name);
-    QIcon svgToIcon(const int & w,
-                    const int & h,
+    explicit SvgRender(const QString &name);
+    QIcon svgToIcon(const int &w,
+                    const int &h,
                     QObject *parent = nullptr) const;
-    QPixmap svgToPixamp(const int & w,
-                        const int & h,
+    QPixmap svgToPixamp(const int &w,
+                        const int &h,
                         QObject *parent = nullptr) const;
 };

@@ -3,8 +3,8 @@
 
 #include <QFileInfo>
 
-ActionFileSize::ActionFileSize(const QString & name,
-                               const QString & uuid,
+ActionFileSize::ActionFileSize(const QString &name,
+                               const QString &uuid,
                                QObject *parent) :
     ActionFile("ActionFileSize",
                name,
