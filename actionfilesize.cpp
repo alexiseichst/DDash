@@ -9,25 +9,19 @@ ActionFileSize::ActionFileSize(const QString &name,
     ActionFile("ActionFileSize",
                name,
                uuid,
-               parent),
-    m_widget(nullptr)
+               parent)
 {
 
 }
 
 void ActionFileSize::exec() const
 {
+    LabelText* widget = getLabeltext();
     QFileInfo file(getFileName());
-    QString  text = "Error";
-    QString  color = "red";
-    if(m_widget &&
-            file.exists())
-    {
-        text = QString("%1 Ko").arg(QString::number(file.size()/1000));
-        color = "green";
-    }
-    m_widget->setLabel(getName());
-    m_widget->setText(text,color);
+    QString  text = file.exists() ? QString("%1 bits").arg(QString::number(file.size())): "Error";
+    QString  color = file.exists() ? "green" : "red";
+    widget->setLabel(getName());
+    widget->setText(text,color);
 }
 
 QWidget* ActionFileSize::getWidget()
@@ -39,6 +33,11 @@ QWidget* ActionFileSize::getWidget()
 void ActionFileSize::setName(const QString & name)
 {
     ActionFile::setName(name);
+}
+
+LabelText* ActionFileSize::getLabeltext() const
+{
+    return dynamic_cast<LabelText*>(m_widget);
 }
 
 QMap<QString,std::function<QString(void)>> ActionFileSize::getConfigMap() const

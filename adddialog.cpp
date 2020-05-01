@@ -41,7 +41,7 @@ AddDialog::AddDialog(QWidget *parent,QMap<QString,std::function<Action*(const QS
 void AddDialog::currentIndexChanged(const QString &text)
 {
     if (m_preview) delete m_preview;
-    m_preview = m_strToAction[text]("name","uuid",nullptr);
+    m_preview = m_strToAction[text](QString(),QString(),nullptr);
 
     if (m_reviewWidget) delete m_reviewWidget;
     m_reviewWidget = m_preview->getWidget();

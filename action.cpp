@@ -9,7 +9,8 @@ Action::Action(const QString &type,
                QObject *parent) :
     QObject(parent),
     m_type(type),
-    m_uuid(uuid.isEmpty()?QUuid::createUuid().toString(QUuid::Id128):uuid)
+    m_uuid(uuid.isEmpty()?QUuid::createUuid().toString(QUuid::Id128):uuid),
+    m_widget(nullptr)
 {
     setObjectName(name);
 }
@@ -32,6 +33,11 @@ const QString &Action::getType() const
 const QString &Action::getUuid() const
 {
     return m_uuid;
+}
+
+bool Action::canExec() const
+{
+    return (m_widget != nullptr);
 }
 
 QMap<QString,std::function<QString(void)>> Action::getConfigMap() const

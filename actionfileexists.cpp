@@ -9,20 +9,22 @@ ActionFileExists::ActionFileExists(const QString &name,
     ActionFile("ActionFileExists",
                name,
                uuid,
-               parent),
-    m_widget(nullptr)
+               parent)
 {
 
 }
 
+LabelStatus* ActionFileExists::getLabelStatus() const
+{
+    return dynamic_cast<LabelStatus*>(m_widget);
+}
+
 void ActionFileExists::exec() const
 {
+    LabelStatus* widget = getLabelStatus();
     QFileInfo file(getFileName());
-    if(m_widget)
-    {
-        m_widget->setStatus(file.exists());
-        m_widget->setLabel(getName());
-    }
+    widget->setStatus(file.exists());
+    widget->setLabel(getName());
 }
 
 QWidget* ActionFileExists::getWidget()

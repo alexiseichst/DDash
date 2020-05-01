@@ -24,11 +24,7 @@ public:
 
 public slots:
     virtual void exec() const = 0;
-    virtual QWidget* getWidget() = 0;
 
 private:
     QString m_file;
-
-signals:
-
 };

@@ -10,32 +10,31 @@ ActionFileDate::ActionFileDate(const QString &name,
     ActionFile("ActionFileDate",
                name,
                uuid,
-               parent),
-    m_widget(nullptr)
+               parent)
 {
 
 }
 
 void ActionFileDate::exec() const
 {
+    LabelText* label = getLabeltext();
     QFileInfo file(getFileName());
-    QString  text = "Error";
-    QString  color = "red";
-    if(m_widget &&
-            file.exists())
-    {
-        text = file.lastModified().date().toString(Qt::SystemLocaleShortDate);
-        color = "green";
-    }
-    m_widget->setText(text,color);
-    m_widget->setLabel(getName());
+    QString  text =  file.exists() ? file.lastModified().date().toString(Qt::SystemLocaleShortDate):"Error";
+    QString  color = file.exists() ? "green":"red";
+    label->setText(text,color);
+    label->setLabel(getName());
+}
+
+LabelText* ActionFileDate::getLabeltext() const
+{
+    return dynamic_cast<LabelText*>(m_widget);
 }
 
 QWidget* ActionFileDate::getWidget()
 {
     m_widget = new LabelText(nullptr);
 
-    m_widget->setLabel(getName());
+    getLabeltext()->setLabel(getName());
 
     return m_widget;
 }

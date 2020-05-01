@@ -9,6 +9,7 @@
 
 #include <QSvgRenderer>
 #include <QVBoxLayout>
+#include <qDebug>
 
 DDash::DDash(QObject *parent) :
     QObject(parent)
@@ -32,7 +33,7 @@ DDash::DDash(QObject *parent) :
         return new ActionFileDate(name,uuid,parent);
     });
 
-
+    // Read json config
     loadConfig();
 }
 
@@ -45,9 +46,7 @@ void DDash::loadConfig()
 {
     QList<QVariantMap> list = Configuration::loadAllAction();
     for (const QVariantMap map: list)
-    {
         addAction(createAction(map));
-    }
 }
 
 void DDash::saveConfig()
@@ -58,9 +57,7 @@ void DDash::saveConfig()
         QVariantMap str_map;
         auto config_map = a->getConfigMap();
         for (auto arg : config_map.keys())
-        {
             str_map.insert(arg,config_map[arg]());
-        }
         list.append(str_map);
     }
     Configuration::saveActionList(list);
@@ -76,13 +73,10 @@ Action* DDash::createAction(const QVariantMap &params,QObject* parent) const
 
     QVariantMap others(params);
     auto config_map = action->setConfigMap();
-    others.remove("name");
-    others.remove("type");
-    others.remove("uuid");
-    others.remove("app");
     for (QString k : others.keys())
     {
-        config_map[k](others[k].toString());
+        if (config_map.contains(k))
+            config_map[k](others[k].toString());
     }
     return action;
 }
@@ -91,9 +85,7 @@ Action* DDash::strToAction(const QString &type,const QString &name,const QString
 {
     Action* action = nullptr;
     if(m_strToAction.contains(type))
-    {
         action = m_strToAction[type](name,uuid,parent);
-    }
     return action;
 }
 
@@ -104,19 +96,21 @@ void DDash::addAction(Action* action)
 
 void DDash::addClicked()
 {
-    AddDialog* dialog = new AddDialog(m_mainWindow,m_strToAction);
-
-    dialog->exec();
-
-    delete dialog;
-    dialog = nullptr;
+    AddDialog dialog(m_mainWindow,m_strToAction);
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        Action* a = createAction(dialog.getActionMap());
+        addAction(a);
+        m_mainWindow->addActionWidget(a->getWidget());
+    }
 }
 
 void DDash::exec()
 {
     for(Action* a : m_actions)
     {
-        a->exec();
+        if (a->canExec())
+            a->exec();
     }
 }
 
@@ -124,10 +118,10 @@ void DDash::show()
 {
     m_mainWindow = new MainWindow(nullptr);
     connect(m_mainWindow,&MainWindow::addClicked,this,&DDash::addClicked);
-
     for(Action* a : m_actions)
-    {
         m_mainWindow->addActionWidget(a->getWidget());
-    }
     m_mainWindow->show();
+
+    if (m_actions.isEmpty())
+        addClicked();
 }

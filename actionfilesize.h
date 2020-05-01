@@ -26,9 +26,5 @@ public slots:
     virtual QWidget* getWidget();
 
 private:
-    LabelText* m_widget;
-
-
-signals:
-
+    LabelText* getLabeltext() const;
 };
