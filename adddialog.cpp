@@ -76,6 +76,7 @@ void AddDialog::currentIndexChanged(const QString &text)
     }
     dynamic_cast<QVBoxLayout*>(this->layout())->insertWidget(1,m_editWidget);
     dynamic_cast<QVBoxLayout*>(this->layout())->insertWidget(2,m_reviewWidget);
+    textEdited();
 }
 
 QVariantMap AddDialog::getActionMap() const
@@ -98,9 +99,11 @@ void AddDialog::textEdited()
     {
         auto config_map = m_preview->setConfigMap();
         QVariantMap str_map = getActionMap();
+        str_map.remove("type");
         for (QString k : str_map.keys())
         {
             config_map[k](str_map[k].toString());
         }
+        m_preview->exec();
     }
 }

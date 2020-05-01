@@ -18,16 +18,22 @@ ActionFileExists::ActionFileExists(const QString &name,
 void ActionFileExists::exec() const
 {
     QFileInfo file(getFileName());
-    if(m_widget) m_widget->setStatus(file.exists());
+    if(m_widget)
+    {
+        m_widget->setStatus(file.exists());
+        m_widget->setLabel(getName());
+    }
 }
 
 QWidget* ActionFileExists::getWidget()
 {
-    m_widget = new LabelStatus(nullptr);
-
-    m_widget->setLabel(getName());
-
+    if (!m_widget) m_widget = new LabelStatus(nullptr);
     return m_widget;
+}
+
+void ActionFileExists::setName(const QString & name)
+{
+    ActionFile::setName(name);
 }
 
 QMap<QString,std::function<QString(void)>> ActionFileExists::getConfigMap() const

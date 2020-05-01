@@ -28,6 +28,7 @@ void ActionFileDate::exec() const
         color = "green";
     }
     m_widget->setText(text,color);
+    m_widget->setLabel(getName());
 }
 
 QWidget* ActionFileDate::getWidget()
@@ -37,6 +38,11 @@ QWidget* ActionFileDate::getWidget()
     m_widget->setLabel(getName());
 
     return m_widget;
+}
+
+void ActionFileDate::setName(const QString & name)
+{
+    ActionFile::setName(name);
 }
 
 QMap<QString,std::function<QString(void)>> ActionFileDate::getConfigMap() const

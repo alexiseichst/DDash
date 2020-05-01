@@ -14,10 +14,10 @@ public:
                     const QString &uuid,
                     QObject *parent);
     QString getName() const;
-    void setName(const QString &);
     const QString &getType() const;
     const QString &getUuid() const;
     virtual QWidget* getWidget() = 0;
+    virtual void setName(const QString &);
     virtual QMap<QString,std::function<QString(void)>> getConfigMap() const;
     virtual QMap<QString,std::function<void(const QString &)>> setConfigMap();
 

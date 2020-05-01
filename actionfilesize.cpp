@@ -26,16 +26,19 @@ void ActionFileSize::exec() const
         text = QString("%1 Ko").arg(QString::number(file.size()/1000));
         color = "green";
     }
+    m_widget->setLabel(getName());
     m_widget->setText(text,color);
 }
 
 QWidget* ActionFileSize::getWidget()
 {
-    m_widget = new LabelText(nullptr);
-
-    m_widget->setLabel(getName());
-
+    if (!m_widget) m_widget = new LabelText(nullptr);
     return m_widget;
+}
+
+void ActionFileSize::setName(const QString & name)
+{
+    ActionFile::setName(name);
 }
 
 QMap<QString,std::function<QString(void)>> ActionFileSize::getConfigMap() const

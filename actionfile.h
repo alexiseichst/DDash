@@ -18,6 +18,7 @@ public:
                         QObject *parent);
     void setFileName(const QString &name);
     const QString &getFileName() const;
+    virtual void setName(const QString &);
     virtual QMap<QString,std::function<QString(void)>> getConfigMap() const;
     virtual QMap<QString,std::function<void(const QString &)>> setConfigMap();
 

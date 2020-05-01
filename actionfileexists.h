@@ -17,6 +17,7 @@ public:
     explicit ActionFileExists(const QString &name,
                               const QString &uuid,
                               QObject *parent);
+    virtual void setName(const QString &);
     virtual QMap<QString,std::function<QString(void)>> getConfigMap() const;
     virtual QMap<QString,std::function<void(const QString &)>> setConfigMap();
 
