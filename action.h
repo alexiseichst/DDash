@@ -13,15 +13,18 @@ public:
                     const QString &name,
                     const QString &uuid,
                     QObject *parent);
-    const QString getName() const;
+    QString getName() const;
+    void setName(const QString &);
     const QString &getType() const;
     const QString &getUuid() const;
     virtual QWidget* getWidget() = 0;
-    virtual QVariantMap getConfigMap() const;
+    virtual QMap<QString,std::function<QString(void)>> getConfigMap() const;
+    virtual QMap<QString,std::function<void(const QString &)>> setConfigMap();
 
 private:
     const QString m_type;
     const QString m_uuid;
+    const QString m_application;
 
 public slots:
     virtual void exec() const = 0;

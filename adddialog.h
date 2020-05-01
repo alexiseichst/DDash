@@ -22,9 +22,12 @@ private:
                                              QObject* parent)>> m_strToAction;
     QComboBox m_typeCombo;
     QWidget* m_editWidget;
+    QWidget* m_reviewWidget;
+    Action* m_preview;
 
 private slots:
     void currentIndexChanged(const QString &text);
+    void textEdited();
 
 
 };

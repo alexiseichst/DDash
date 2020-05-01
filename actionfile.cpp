@@ -12,19 +12,26 @@ ActionFile::ActionFile(const QString &type,
 
 }
 
-void ActionFile::setFile(const QFile &file)
+void ActionFile::setFileName(const QString &name)
 {
-    m_file.setFileName(file.fileName());
+    m_file = name;
 }
 
-const QFile &ActionFile::getFile() const
+const QString &ActionFile::getFileName() const
 {
     return m_file;
 }
 
-QVariantMap ActionFile::getConfigMap() const
+QMap<QString,std::function<QString(void)>> ActionFile::getConfigMap() const
 {
-    QVariantMap rt = Action::getConfigMap();
-    rt.insert("file",m_file.fileName());
+    QMap<QString,std::function<QString(void)>> rt = Action::getConfigMap();
+    rt.insert("file",std::bind(&ActionFile::getFileName,this));
+    return rt;
+}
+
+QMap<QString,std::function<void(const QString &)>> ActionFile::setConfigMap()
+{
+    QMap<QString,std::function<void(const QString &)>> rt;
+    rt.insert("file",std::bind(&ActionFile::setFileName,this,std::placeholders::_1));
     return rt;
 }

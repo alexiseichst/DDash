@@ -16,16 +16,17 @@ public:
                         const QString &name,
                         const QString &uuid,
                         QObject *parent);
-    void setFile(const QFile &file);
-    const QFile &getFile() const;
-    virtual QVariantMap getConfigMap() const;
+    void setFileName(const QString &name);
+    const QString &getFileName() const;
+    virtual QMap<QString,std::function<QString(void)>> getConfigMap() const;
+    virtual QMap<QString,std::function<void(const QString &)>> setConfigMap();
 
 public slots:
     virtual void exec() const = 0;
     virtual QWidget* getWidget() = 0;
 
 private:
-    QFile m_file;
+    QString m_file;
 
 signals:
 

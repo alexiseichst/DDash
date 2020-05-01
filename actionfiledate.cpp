@@ -18,7 +18,7 @@ ActionFileDate::ActionFileDate(const QString &name,
 
 void ActionFileDate::exec() const
 {
-    QFileInfo file(getFile().fileName());
+    QFileInfo file(getFileName());
     QString  text = "Error";
     QString  color = "red";
     if(m_widget &&
@@ -39,8 +39,14 @@ QWidget* ActionFileDate::getWidget()
     return m_widget;
 }
 
-QVariantMap ActionFileDate::getConfigMap() const
+QMap<QString,std::function<QString(void)>> ActionFileDate::getConfigMap() const
 {
-    QVariantMap rt = ActionFile::getConfigMap();
+    QMap<QString,std::function<QString(void)>> rt = ActionFile::getConfigMap();;
+    return rt;
+}
+
+QMap<QString,std::function<void(const QString &)>> ActionFileDate::setConfigMap()
+{
+    QMap<QString,std::function<void(const QString &)>> rt = ActionFile::setConfigMap();
     return rt;
 }

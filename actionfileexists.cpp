@@ -17,7 +17,7 @@ ActionFileExists::ActionFileExists(const QString &name,
 
 void ActionFileExists::exec() const
 {
-    QFileInfo file(getFile().fileName());
+    QFileInfo file(getFileName());
     if(m_widget) m_widget->setStatus(file.exists());
 }
 
@@ -30,8 +30,14 @@ QWidget* ActionFileExists::getWidget()
     return m_widget;
 }
 
-QVariantMap ActionFileExists::getConfigMap() const
+QMap<QString,std::function<QString(void)>> ActionFileExists::getConfigMap() const
 {
-    QVariantMap rt = ActionFile::getConfigMap();
+    QMap<QString,std::function<QString(void)>> rt = ActionFile::getConfigMap();
+    return rt;
+}
+
+QMap<QString,std::function<void(const QString &)>> ActionFileExists::setConfigMap()
+{
+    QMap<QString,std::function<void(const QString &)>> rt = ActionFile::setConfigMap();
     return rt;
 }

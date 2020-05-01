@@ -17,11 +17,12 @@ public:
     explicit ActionFileSize(const QString &name,
                             const QString &uuid,
                             QObject *parent);
+    virtual QMap<QString,std::function<QString(void)>> getConfigMap() const;
+    virtual QMap<QString,std::function<void(const QString &)>> setConfigMap();
 
 public slots:
     virtual void exec() const;
     virtual QWidget* getWidget();
-    virtual QVariantMap getConfigMap() const;
 
 private:
     LabelText* m_widget;

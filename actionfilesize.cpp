@@ -17,7 +17,7 @@ ActionFileSize::ActionFileSize(const QString &name,
 
 void ActionFileSize::exec() const
 {
-    QFileInfo file(getFile().fileName());
+    QFileInfo file(getFileName());
     QString  text = "Error";
     QString  color = "red";
     if(m_widget &&
@@ -38,8 +38,14 @@ QWidget* ActionFileSize::getWidget()
     return m_widget;
 }
 
-QVariantMap ActionFileSize::getConfigMap() const
+QMap<QString,std::function<QString(void)>> ActionFileSize::getConfigMap() const
 {
-    QVariantMap rt = ActionFile::getConfigMap();
+    QMap<QString,std::function<QString(void)>> rt =  ActionFile::getConfigMap();
+    return rt;
+}
+
+QMap<QString,std::function<void(const QString &)>> ActionFileSize::setConfigMap()
+{
+    QMap<QString,std::function<void(const QString &)>> rt = ActionFile::setConfigMap();;
     return rt;
 }

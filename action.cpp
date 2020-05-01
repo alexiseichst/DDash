@@ -14,9 +14,14 @@ Action::Action(const QString &type,
     setObjectName(name);
 }
 
-const QString Action::getName() const
+QString Action::getName() const
 {
     return objectName();
+}
+
+void Action::setName(const QString & name)
+{
+    setObjectName(name);
 }
 
 const QString &Action::getType() const
@@ -29,12 +34,18 @@ const QString &Action::getUuid() const
     return m_uuid;
 }
 
-QVariantMap Action::getConfigMap() const
+QMap<QString,std::function<QString(void)>> Action::getConfigMap() const
 {
-    QVariantMap rt;
-    rt.insert("application",QApplication::applicationName());
-    rt.insert("type",getType());
-    rt.insert("name",objectName());
-    rt.insert("uuid",getUuid());
+    QMap<QString,std::function<QString(void)>> rt;
+    rt.insert("type",std::bind(&Action::getType,this));
+    rt.insert("name",std::bind(&Action::getName,this));
+    rt.insert("uuid",std::bind(&Action::getUuid,this));
+    return rt;
+}
+
+QMap<QString,std::function<void(const QString &)>> Action::setConfigMap()
+{
+    QMap<QString,std::function<void(const QString &)>> rt;
+    rt.insert("name",std::bind(&Action::setName,this,std::placeholders::_1));
     return rt;
 }

@@ -20,8 +20,9 @@ void Configuration::saveActionList(QList<QVariantMap> list)
 {
     QDir act_dir("act");
     if (!act_dir.exists()) QDir::current().mkdir("act");
-    for(const QVariantMap map : list)
+    for(QVariantMap map : list)
     {
+        map.insert("app",QApplication::applicationName());
         QJsonDocument doc(QJsonObject::fromVariantMap(map));
         QFileInfo file_info(act_dir,QString("%1.json").arg(doc.object()["uuid"].toString()));
         QFile file(file_info.absoluteFilePath());
@@ -48,8 +49,8 @@ QList<QVariantMap> Configuration::loadAllAction()
             const QVariantMap map = obj.toVariantMap();
             file.close();
 
-            if (map.contains("application") &&
-                map["application"].toString() == QApplication::applicationName())
+            if (map.contains("app") &&
+                map["app"].toString() == QApplication::applicationName())
             {
                 rt.append(map);
             }

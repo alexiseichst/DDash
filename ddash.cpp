@@ -18,33 +18,20 @@ DDash::DDash(QObject *parent) :
     {
         return new ActionFileSize(name,uuid,parent);
     });
-    m_strToSetAction.insert("ActionFileSize",[](const QVariantMap &params,Action* action)
-    {
-        ActionFileSize* action_file_size = dynamic_cast<ActionFileSize*>(action);
-        action_file_size->setFile(QFile(params["file"].toString()));
-    });
 
     // ActionFileExists
     m_strToAction.insert("ActionFileExists",[](const QString &name,const QString &uuid,QObject* parent)
     {
         return new ActionFileExists(name,uuid,parent);
     });
-    m_strToSetAction.insert("ActionFileExists",[](const QVariantMap &params,Action* action)
-    {
-        ActionFileExists* action_file_size = dynamic_cast<ActionFileExists*>(action);
-        action_file_size->setFile(QFile(params["file"].toString()));
-    });
+
 
     // ActionFileDate
     m_strToAction.insert("ActionFileDate",[](const QString &name,const QString &uuid,QObject* parent)
     {
         return new ActionFileDate(name,uuid,parent);
     });
-    m_strToSetAction.insert("ActionFileDate",[](const QVariantMap &params,Action* action)
-    {
-        ActionFileDate* action_file_size = dynamic_cast<ActionFileDate*>(action);
-        action_file_size->setFile(QFile(params["file"].toString()));
-    });
+
 
     loadConfig();
 }
@@ -68,7 +55,13 @@ void DDash::saveConfig()
     QList<QVariantMap> list;
     for(Action* a : m_actions)
     {
-        list.append(a->getConfigMap());
+        QVariantMap str_map;
+        auto config_map = a->getConfigMap();
+        for (auto arg : config_map.keys())
+        {
+            str_map.insert(arg,config_map[arg]());
+        }
+        list.append(str_map);
     }
     Configuration::saveActionList(list);
 }
@@ -80,7 +73,17 @@ Action* DDash::createAction(const QVariantMap &params,QObject* parent) const
             params["name"].toString(),
             uuid,
             parent);
-    m_strToSetAction[params["type"].toString()](params,action);
+
+    QVariantMap others(params);
+    auto config_map = action->setConfigMap();
+    others.remove("name");
+    others.remove("type");
+    others.remove("uuid");
+    others.remove("app");
+    for (QString k : others.keys())
+    {
+        config_map[k](others[k].toString());
+    }
     return action;
 }
 
@@ -103,14 +106,7 @@ void DDash::addClicked()
 {
     AddDialog* dialog = new AddDialog(m_mainWindow,m_strToAction);
 
-    int res = dialog->exec();
-
-    if (res == QDialog::Accepted)
-    {
-        Action* a = createAction(dialog->getActionMap());
-        addAction(a);
-        m_mainWindow->addActionWidget(a->getWidget());
-    }
+    dialog->exec();
 
     delete dialog;
     dialog = nullptr;

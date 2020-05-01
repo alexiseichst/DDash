@@ -12,13 +12,15 @@ AddDialog::AddDialog(QWidget *parent,QMap<QString,std::function<Action*(const QS
                                                                         QObject* parent)>> str_to_action) :
     QDialog(parent),
     m_strToAction(str_to_action),
-    m_editWidget(nullptr)
+    m_editWidget(nullptr),
+    m_reviewWidget(nullptr),
+    m_preview(nullptr)
 {
     setStyleSheet("QDialog { background: white; }");
     setLayout(new QVBoxLayout);
     dynamic_cast<QVBoxLayout*>(layout())->setAlignment(Qt::AlignTop);
-    resize(400,200);
-    setMinimumSize(400,200);
+    resize(400,400);
+    setMinimumSize(400,400);
 
     m_typeCombo.setParent(this);
     connect(&m_typeCombo,SIGNAL(currentIndexChanged(const QString)),this,SLOT(currentIndexChanged(const QString)));
@@ -38,31 +40,42 @@ AddDialog::AddDialog(QWidget *parent,QMap<QString,std::function<Action*(const QS
 
 void AddDialog::currentIndexChanged(const QString &text)
 {
-    const Action* a = m_strToAction[text]("name","uuid",nullptr);
-    QVariantMap map = a->getConfigMap();
+    if (m_preview) delete m_preview;
+    m_preview = m_strToAction[text]("name","uuid",nullptr);
+
+    if (m_reviewWidget) delete m_reviewWidget;
+    m_reviewWidget = m_preview->getWidget();
+
+    auto map = m_preview->getConfigMap();
     QGridLayout* layout = nullptr;
+    QVariantMap history;
 
     map.remove("application");
     map.remove("uuid");
     map.remove("type");
 
-    if (m_editWidget) delete m_editWidget;
+    if (m_editWidget)
+    {
+        history = getActionMap();
+        delete m_editWidget;
+    }
     m_editWidget = new QWidget(this);
     layout = new QGridLayout(m_editWidget);
     m_editWidget->setLayout(layout);
+
     for (QString k :map.keys())
     {
         QWidget* w = new QLabel(QString("%1: ").arg(k),this);
         layout->addWidget(w,layout->rowCount(),0);
 
-        w = new QLineEdit(this);
-        w->setObjectName(k);
-        layout->addWidget(w,layout->rowCount()-1,1);
+        QString text = history.contains(k) ? history[k].toString() : QString();
+        QLineEdit* le = new QLineEdit(text,this);
+        connect(le,&QLineEdit::textEdited,this,&AddDialog::textEdited);
+        le->setObjectName(k);
+        layout->addWidget(le,layout->rowCount()-1,1);
     }
-    dynamic_cast<QVBoxLayout*>(this->layout())->addWidget(m_editWidget);
-
-    delete a;
-    a = nullptr;
+    dynamic_cast<QVBoxLayout*>(this->layout())->insertWidget(1,m_editWidget);
+    dynamic_cast<QVBoxLayout*>(this->layout())->insertWidget(2,m_reviewWidget);
 }
 
 QVariantMap AddDialog::getActionMap() const
@@ -77,4 +90,17 @@ QVariantMap AddDialog::getActionMap() const
     }
     rt.insert("type",m_typeCombo.currentText());
     return rt;
+}
+
+void AddDialog::textEdited()
+{
+    if (m_preview)
+    {
+        auto config_map = m_preview->setConfigMap();
+        QVariantMap str_map = getActionMap();
+        for (QString k : str_map.keys())
+        {
+            config_map[k](str_map[k].toString());
+        }
+    }
 }
