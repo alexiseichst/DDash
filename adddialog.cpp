@@ -6,6 +6,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QDialogButtonBox>
+#include <QGroupBox>
 
 AddDialog::AddDialog(QWidget *parent,QMap<QString,std::function<Action*(const QString &name,
                                                                         const QString &uuid,
@@ -25,6 +26,7 @@ AddDialog::AddDialog(QWidget *parent,QMap<QString,std::function<Action*(const QS
     m_typeCombo.setParent(this);
     connect(&m_typeCombo,SIGNAL(currentIndexChanged(const QString)),this,SLOT(currentIndexChanged(const QString)));
     dynamic_cast<QVBoxLayout*>(layout())->addWidget(&m_typeCombo,Qt::AlignTop);
+    dynamic_cast<QVBoxLayout*>(layout())->addSpacing(50);
     for (const QString k : m_strToAction.keys())
     {
         m_typeCombo.addItem(k,k);
@@ -44,7 +46,9 @@ void AddDialog::currentIndexChanged(const QString &text)
     m_preview = m_strToAction[text](QString(),QString(),nullptr);
 
     if (m_reviewWidget) delete m_reviewWidget;
-    m_reviewWidget = m_preview->getWidget();
+    m_reviewWidget = new QGroupBox("Preview",this);
+    m_reviewWidget->setLayout(new QHBoxLayout);
+    m_reviewWidget->layout()->addWidget(m_preview->getWidget());
 
     auto map = m_preview->getConfigMap();
     QGridLayout* layout = nullptr;
@@ -59,7 +63,7 @@ void AddDialog::currentIndexChanged(const QString &text)
         history = getActionMap();
         delete m_editWidget;
     }
-    m_editWidget = new QWidget(this);
+    m_editWidget = new QGroupBox("Settings",this);
     layout = new QGridLayout(m_editWidget);
     m_editWidget->setLayout(layout);
 
@@ -74,8 +78,8 @@ void AddDialog::currentIndexChanged(const QString &text)
         le->setObjectName(k);
         layout->addWidget(le,layout->rowCount()-1,1);
     }
-    dynamic_cast<QVBoxLayout*>(this->layout())->insertWidget(1,m_editWidget);
-    dynamic_cast<QVBoxLayout*>(this->layout())->insertWidget(2,m_reviewWidget);
+    dynamic_cast<QVBoxLayout*>(this->layout())->insertWidget(2,m_editWidget);
+    dynamic_cast<QVBoxLayout*>(this->layout())->insertWidget(3,m_reviewWidget);
     textEdited();
 }
 
@@ -99,6 +103,7 @@ void AddDialog::textEdited()
     {
         auto config_map = m_preview->setConfigMap();
         QVariantMap str_map = getActionMap();
+        str_map.insert("name",str_map["name"].toString().isEmpty() ? "<name>" : str_map["name"]);
         str_map.remove("type");
         for (QString k : str_map.keys())
         {
